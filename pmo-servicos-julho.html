@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PMO Serviços | Acompanhamento de Projetos — Julho 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .nav-item { transition: all 0.2s ease-in-out; cursor: pointer; border-left: 4px solid transparent; }
+        .nav-item:hover:not(.active) { background-color: #f1f5f9; color: #0f172a; }
+        .nav-item.active { background-color: #f0fdff; color: #00a8c8; font-weight: 600; border-left-color: #00c9eb; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .accordion-content.open { max-height: 4000px; }
+        .chevron { transition: transform 0.3s ease; }
+        .chevron.rotated { transform: rotate(180deg); }
+        .bar-fill { transition: width 0.8s ease; }
+        .chart-container { position: relative; width: 100%; max-width: 480px; height: 280px; margin: 0 auto; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-screen overflow-hidden antialiased">
+
+<!-- Botão fixo para voltar ao menu (visível em mobile e desktop) -->
+<button onclick="window.location.href='index.html'"
+        aria-label="Voltar ao menu"
+        class="fixed top-4 right-4 z-50 bg-[#00c9eb] hover:brightness-95 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-md flex items-center gap-2 md:top-6 md:right-6">
+    ← VOLTAR AO MENU
+</button>
+
+<div class="flex flex-col md:flex-row h-full w-full">
+
+    <aside class="w-full md:w-72 bg-white border-b md:border-b-0 md:border-r border-slate-200 flex-none flex flex-col shadow-sm z-20">
+        <div class="p-5 border-b border-slate-100 flex items-center gap-3 shrink-0">
+            <span class="text-2xl">📋</span>
+            <div>
+                <h1 class="font-bold text-lg text-slate-800 leading-tight">PMO Serviços</h1>
+                <p class="text-xs text-slate-400 mt-0.5">Acompanhamento de Projetos</p>
+            </div>
+        </div>
+        <div class="px-4 py-3 border-b border-slate-50 bg-slate-50 shrink-0 hidden md:block">
+            <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Navegação das Iniciativas</p>
+        </div>
+        <nav class="flex-1 overflow-x-auto md:overflow-y-auto flex md:flex-col p-2 md:p-3 gap-1" id="sidebar-nav"></nav>
+        <div class="p-4 bg-slate-100 text-xs text-slate-400 text-center shrink-0 hidden md:block">
+            PMO Serviços TOTVS · Julho 2026
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-slate-50/50">
+        <header class="bg-white border-b border-slate-200 px-6 md:px-10 py-5 shrink-0 shadow-sm flex items-center justify-between z-10 relative">
+            <div>
+                <h2 class="text-xl md:text-2xl font-extrabold text-slate-800 tracking-tight" id="main-title">Visão Geral do Portfólio</h2>
+                <p class="text-sm text-slate-500 mt-1" id="main-subtitle">PMO Serviços · Julho 2026</p>
+            </div>
+            <div class="hidden md:flex items-center gap-2 flex-shrink-0" id="header-badges"></div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 lg:p-10" id="content-container"></div>
+    </main>
+</div>
+
+<script>
+const appData = {
+    iniciativas: [
+        {
+            id: 'overview',
+            icon: '📊',
+            title: 'Visão Geral do Portfólio',
+            shortTitle: 'Visão Geral',
+            subtitle: 'KPIs, distribuição por status e responsáveis',
+            tipo: 'overview'
+        },
+        {
+            id: 'academia',
+            icon: '🎓',
+            title: 'Academia de Serviços',
+            shortTitle: 'Academia de Serviços',
+            subtitle: 'Capacitação interna e desenvolvimento de talentos',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha o acompanhamento da iniciativa <strong>Academia de Serviços</strong>, com foco em manter e sustentar o NPS acima do baseline por meio de capacitação comportamental e de experiência do cliente.',
+            projetos: [
+                {
+                    titulo: 'Manter e sustentar o NPS em 2 pontos acima do baseline (Capacitação NPS)',
+                    status: 'andamento',
+                    responsavel: 'Erika Rodrigues Miranda',
+                    objetivo: 'Manter e sustentar o NPS em 2 pontos acima do baseline, fortalecendo comportamentos e práticas que elevem a experiência do cliente e a qualidade das entregas.',
+                    detalhamento: 'Foi realizado alinhamento com o HUB de Treinamentos (RMO) para definição da estratégia de disponibilização da capacitação de NPS na Unit. A capacitação será desenvolvida em formato de vídeo, com conteúdo baseado no workshop já realizado. O HUB apoiará a divulgação do treinamento e sua inclusão como obrigatório na trilha de Serviços. A produção do material será realizada com a IA HeyGem, já aprovada, cuja assinatura está em trâmite de pagamento para liberação e início da produção prevista para início em Setembro/26.',
+                    proximosPassos: null
+                }
+            ]
+        },
+        {
+            id: 'reconhecimento',
+            icon: '🏅',
+            title: 'Ações de Reconhecimento',
+            shortTitle: 'Ações de Reconhecimento',
+            subtitle: 'Visibilidade para equipes envolvidas nos Go Lives',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a iniciativa <strong>Ações de Reconhecimento</strong>, com foco em dar visibilidade às pessoas envolvidas nos Go Lives, valorizando o esforço, o protagonismo e o impacto das entregas estratégicas.',
+            projetos: [
+                {
+                    titulo: 'Dar visibilidade e reconhecimento às pessoas nos Go Lives',
+                    status: 'andamento',
+                    responsavel: 'Verônica Conde',
+                    objetivo: 'Dar visibilidade e reconhecimento às pessoas envolvidas nos Go Lives, valorizando o esforço, o protagonismo e o impacto das entregas estratégicas.',
+                    detalhamento: 'Não há novas ações de reconhecimento estruturadas até o momento. Registro de oportunidade futura para utilização de eventos corporativos como ação de reconhecimento, ainda sem definição de implementação.',
+                    proximosPassos: null
+                }
+            ]
+        },
+        {
+            id: 'bid',
+            icon: '📋',
+            title: 'BID Approval & Matriz de Complexidade',
+            shortTitle: 'BID Approval & Matriz',
+            subtitle: 'Previsibilidade e precificação nas implantações',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a iniciativa <strong>BID Approval & Matriz de Complexidade</strong>, voltada a aumentar a previsibilidade nas implantações, melhorar a precificação dos projetos e minimizar riscos iniciais.',
+            projetos: [
+                {
+                    titulo: 'Utilização de ferramentas BID Approval e Matriz de Complexidade',
+                    status: 'andamento',
+                    responsavel: 'Caio Pereira',
+                    objetivo: 'Aumentar a previsibilidade nas implantações, melhorar a precificação dos projetos e minimizar riscos iniciais com planejamentos mais acurados.',
+                    detalhamento: 'Foi concluída a automação para identificação das evidências de BID armazenadas pelo time de EV, permitindo localizar automaticamente os arquivos nas pastas. Durante a implementação, foram identificadas oportunidades de melhoria relacionadas ao tempo de processamento, em função do elevado volume de pastas criadas a partir dos tickets e da falta de padronização na nomenclatura dos arquivos.\n\nPara endereçar esse cenário, foi estabelecida uma nova governança de armazenamento, padronizando a estrutura das pastas desde a abertura dos tickets. Também foi reforçada a obrigatoriedade de armazenamento do BID, da gravação e da transcrição das reuniões, garantindo rastreabilidade das decisões e maior aderência ao processo.\n\nA equipe está refinando a automação para melhorar a performance da varredura das pastas e realizando o cruzamento das informações com as oportunidades do CRM para validar a cobertura das evidências localizadas.',
+                    evidencias: null,
+                    evidenciaExtra: { label: '📄 Comunicado de Governança para Armazenamento de BID — enviado ao time de EV em 10/06/2026, oficializando a padronização da estrutura de pastas, a criação da subpasta de BID e a obrigatoriedade de armazenamento do BID, gravação e transcrição das reuniões.', url: 'https://drive.google.com/file/d/1ixGIsRYsmLxrSDh8C12_--tWt1e2G7B-/view?usp=drive_link' },
+                    proximosPassos: 'Refinar a automação para reduzir o tempo de processamento e aumentar a assertividade na localização dos BIDs.\n\nConsolidar a padronização da estrutura de armazenamento e acompanhar a aderência das equipes ao novo processo.\n\nConcluir o cruzamento das informações com o CRM para validar a cobertura dos BIDs identificados e disponibilizar indicadores de aderência ao processo.'
+                }
+            ]
+        },
+        {
+            id: 'cafe',
+            icon: '☕',
+            title: 'Café com Diretor',
+            shortTitle: 'Café com Diretor',
+            subtitle: 'Engajamento e aproximação entre liderança e colaboradores',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a iniciativa <strong>Café com Diretor</strong>, programa de engajamento conduzido em parceria com RH, focado em sustentar a motivação e o senso de pertencimento.',
+            projetos: [
+                {
+                    titulo: 'Café com Diretor — Programa de Engajamento',
+                    status: 'andamento',
+                    responsavel: 'Verônica Conde',
+                    objetivo: 'Sustentar o engajamento, a motivação e a qualidade das entregas, especialmente após o movimento de incorporação salarial, reforçando o senso de pertencimento e propósito.',
+                    detalhamento: 'Confirmação da realização do Café com Diretor para São Paulo em 20/08/2026. Registro da ampliação da duração do evento para aproximadamente 2h30, em atendimento aos feedbacks dos participantes (principal ponto de melhoria identificado nas pesquisas de satisfação das últimas edições).',
+                    linkExtra: { label: '📊 Consolidado das pesquisas de satisfação das últimas edições', url: 'https://docs.google.com/spreadsheets/d/1kBpsEVFuHc_T_157PMb62_VCW7kK1Zq0oNUZqihna0E/edit?gid=0#gid=0' },
+                    resultados: [
+                        {
+                            titulo: 'Café com Diretor — 31/03/2026 · São Paulo (Matriz)',
+                            participantes: 10,
+                            geral: ['100% Muito Satisfeito com organização, comunicação, local e serviço de alimentos e bebidas.', '100% Excelente na avaliação da interatividade.'],
+                            positivos: ['Proximidade com a liderança.', 'Integração e networking.', 'Acolhimento dos novos colaboradores.', 'Organização do evento.', 'Motivação e engajamento.'],
+                            melhorias: ['Ampliar a interatividade do formato.', 'Incluir mais exemplos práticos e estudos de caso.', 'Criar desafios ou ações pós-evento.', 'Levantar previamente temas de interesse dos participantes.', 'Manter grupos reduzidos para favorecer as discussões.']
+                        },
+                        {
+                            titulo: 'Café com Diretor — 19/05/2026 · Rio de Janeiro',
+                            participantes: 11,
+                            geral: ['91% Muito Satisfeito e 9% Satisfeito com data, avisos, comunicados e local do evento.', '100% Muito Satisfeito com o serviço de alimentos e bebidas.', '91% Excelente e 9% Boa na avaliação da interatividade.'],
+                            positivos: ['Proximidade com a liderança.', 'Troca de experiências e networking.', 'Acolhimento e integração dos colaboradores.', 'Organização e ambiente do evento.', 'Sentimento de pertencimento, motivação e orgulho em fazer parte da TOTVS.'],
+                            melhorias: ['Não foram identificados pontos críticos de melhoria.', 'Os participantes sugeriram manter o formato atual e dar continuidade à iniciativa.']
+                        }
+                    ],
+                    calendario: [
+                        { data: '31/03/2026', status: 'Realizado', local: 'Matriz' },
+                        { data: '19/05/2026', status: 'Realizado', local: 'Rio de Janeiro' },
+                        { data: '30/07/2026', status: 'Confirmado', local: 'Brasília' },
+                        { data: '20/08/2026', status: 'Confirmado', local: 'São Paulo' },
+                        { data: '02/09/2026', status: 'Reservado', local: 'Porto Alegre' },
+                        { data: '03/09/2026', status: 'Reservado', local: 'Caxias' },
+                        { data: '06/10/2026', status: 'Reservado', local: 'Campinas' },
+                        { data: '27/10/2026', status: 'Reservado', local: 'Ribeirão Preto' },
+                        { data: '25/11/2026', status: 'Reservado', local: 'Recife' },
+                    ],
+                    proximosPassos: null
+                }
+            ]
+        },
+        {
+            id: 'chave',
+            icon: '🔑',
+            title: 'Chave de Ouro',
+            shortTitle: 'Chave de Ouro',
+            subtitle: 'Programa descontinuado',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção registra o encerramento da iniciativa <strong>Chave de Ouro</strong>, descontinuada após validação com os responsáveis.',
+            projetos: [
+                {
+                    titulo: 'Retorno do programa Chave de Ouro',
+                    status: 'encerrado',
+                    responsavel: 'Fabiano Migoto',
+                    objetivo: 'Retorno do programa Chave de Ouro com governança renovada e mapeamento de usuários-chave.',
+                    detalhamento: 'Após validações com os responsáveis da iniciativa (Ivan do time do Sartório), foi confirmado que o projeto foi descontinuado e não possui previsão de retomada. A iniciativa deixou de existir devido às novas regras de governança relacionadas à liberação de código-fonte, que não permitem mais o modelo utilizado anteriormente.',
+                    proximosPassos: null
+                }
+            ]
+        },
+        {
+            id: 'churn',
+            icon: '📉',
+            title: 'Diminuição de Churn',
+            shortTitle: 'Diminuição de Churn',
+            subtitle: 'Meta de redução do churn para 12%',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a iniciativa <strong>Diminuição de Churn</strong>, com meta de reduzir o churn para 12%, envolvendo as áreas de CS, Financeiro, Comercial e Serviços.',
+            projetos: [
+                {
+                    titulo: 'Diminuição do Churn — Meta 12%',
+                    status: 'andamento',
+                    responsavel: 'Alex Jewstuzenko',
+                    objetivo: 'Redução do churn para 12% por meio do mapeamento de áreas envolvidas e estruturação de um plano de ação abrangente (AS IS → TO BE).',
+                    detalhamento: 'Desenvolvido o modelo inicial do processo, apresentado ao Hermano para validação da abordagem. Feedback positivo recebido, com solicitação de ajustes antes da aprovação final. Nova apresentação prevista para a última semana de julho, quando será realizada a validação final junto ao Hermano e ao Apendino.\n\nRealizadas reuniões com a equipe de Estratégia Comercial (Renata Almeida e equipe) para alinhamento dos indicadores e integração das bases de dados utilizadas no acompanhamento do churn.\n\nIniciada a integração de informações do EPMO à IA do Consultor de Vendas, permitindo consolidar dados de contratos, financeiro, serviços, riscos, backlog e status dos projetos em uma única consulta, apoiando decisões e planos de ação.\n\nProjeto encontra-se na fase de consolidação e aprovação do processo para início da operação. A definição da data final e dos indicadores de sucesso será alinhada com Hermano e Apendino após a validação do modelo.',
+                    proximosPassos: 'Concluir os ajustes solicitados no modelo.\n\nRealizar apresentação de aprovação na última semana de julho.\n\nIniciar a execução do novo processo após aprovação.\n\nDefinir cronograma, marcos finais e métricas de acompanhamento dos resultados.'
+                }
+            ]
+        },
+        {
+            id: 'gestao',
+            icon: '⚙️',
+            title: 'Diminuição de custo com HE e interjornada + TAC BH',
+            shortTitle: 'HE, Interjornada + TAC BH',
+            subtitle: 'Redução de custos com HE, interjornada e TAC BH',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a iniciativa <strong>Diminuição de custo com HE e interjornada + TAC BH</strong>, consolidando o acompanhamento da redução de horas extras e interjornada e o acompanhamento executivo da unidade BH.',
+            projetos: [
+                {
+                    titulo: 'Diminuir o custo com Horas Extras (HE) e Interjornada',
+                    status: 'andamento',
+                    responsavel: 'Rogério Magno',
+                    objetivo: 'Diminuir o custo com horas extras (HE) e interjornada por meio de revisão de alocação, planejamento de capacidade e produtividade, com definição de meta clara de redução.',
+                    detalhamento: 'O formato do reporte executivo dos RMOs foi revisado e simplificado, passando a consolidar, no corpo do e-mail, os principais indicadores operacionais, financeiros e o andamento das iniciativas estratégicas. O novo modelo contempla informações sobre operação (ICH e ociosidade), finanças (massa salarial, horas extras, terceiros e programa Speed to Hero) e status dos projetos prioritários, proporcionando uma comunicação mais objetiva e ágil para a liderança.',
+                    linkExtra: { label: '📄 Ver reporte executivo atualizado', url: 'https://drive.google.com/file/d/1yl2ARiV4fgOizyXJe-h9WuictGQZjKQV/view' },
+                    proximosPassos: null
+                },
+                {
+                    titulo: 'TAC BH',
+                    status: 'andamento',
+                    responsavel: 'Rogério Magno',
+                    objetivo: 'Estruturar modelo de acompanhamento executivo das horas excedentes na unidade BH, com visão consolidada de volume, riscos, justificativas e planos de ação.',
+                    detalhamento: 'Foi realizado o primeiro levantamento estruturado das horas excedentes do TAC BH, referente ao período de <strong>11/04 a 10/05/2026</strong>, totalizando <strong>234h50</strong> de horas extras no período. O levantamento consolidou o volume por cliente, a classificação de motivo e as ações adotadas pelo time, servindo de base para o modelo de acompanhamento que será replicado nos próximos ciclos de governança.\n\nFoi alinhado que, para os próximos meses, serão realizados levantamentos similares referentes aos últimos períodos que antecedem as agendas de report, garantindo consistência e rastreabilidade das informações.',
+                    tacbhData: {
+                        totalHoras: '234h50',
+                        periodo: '11/04 a 10/05/2026',
+                        linkCompleto: { label: '📊 Ver levantamento completo — todos os clientes, motivos e justificativas', url: 'https://docs.google.com/spreadsheets/d/1Tn1x23J0wc-STb4WyKtTBJhKyt3dL1dgKynYCeNlxNE/edit?usp=drive_link' },
+                        topClientes: [
+                            { cliente: 'EMIVE', horas: '159h49', percentual: 68, motivo: 'Projeto em Crise' },
+                            { cliente: 'Mroscoe', horas: '18h22', percentual: 8, motivo: 'Demanda Emergencial' },
+                            { cliente: 'Reunião de Resultados', horas: '14h54', percentual: 6, motivo: 'Situação Pontual' }
+                        ],
+                        classificacao: [
+                            { label: 'Projeto em Crise', percentual: 68 },
+                            { label: 'Demanda Emergencial', percentual: 20 },
+                            { label: 'Situação Pontual', percentual: 12 }
+                        ]
+                    },
+                    proximosPassos: null
+                }
+            ]
+        },
+        {
+            id: 'keypeople',
+            icon: '🌟',
+            title: 'Key People & Mentoria',
+            shortTitle: 'Key People & Mentoria',
+            subtitle: 'Pipeline de sucessão e desenvolvimento de lideranças',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a iniciativa <strong>Key People & Mentoria</strong>, dividida em 2 projetos voltados a ampliar e estruturar o pipeline de sucessão, garantindo continuidade e retenção de conhecimento crítico.',
+            projetos: [
+                {
+                    titulo: 'Key People — Pipeline de Sucessão',
+                    status: 'andamento',
+                    responsavel: 'Felipe Tomaz',
+                    objetivo: 'Ampliar e estruturar o pipeline de sucessão, garantindo continuidade, desenvolvimento de lideranças e retenção de conhecimento crítico.',
+                    detalhamento: 'Com o encerramento do ciclo de Performance H1, a equipe iniciou as discussões sobre o melhor modelo para implementação das ações previstas. O projeto ainda não teve evolução prática, pois está em fase de revisão do processo e definição da abordagem que será adotada para execução ao longo do segundo semestre.',
+                    proximosPassos: null
+                },
+                {
+                    titulo: 'Mentoria — Desenvolvimento de Lideranças',
+                    status: 'andamento',
+                    responsavel: 'Felipe Tomaz',
+                    objetivo: 'Ampliar e estruturar o pipeline de sucessão, garantindo continuidade, desenvolvimento de lideranças e retenção de conhecimento crítico.',
+                    detalhamento: 'A iniciativa permanece aguardando a definição do modelo de execução, após a conclusão do ciclo de Performance H1. Como as ações de mentoria dependem desse fechamento, o projeto segue em fase de estruturação e deverá avançar durante o H2.',
+                    proximosPassos: null
+                }
+            ]
+        },
+        {
+            id: 'pesquisa',
+            icon: '📣',
+            title: 'Pesquisa Fala, Gente Boa!',
+            shortTitle: 'Pesquisa Fala, Gente Boa!',
+            subtitle: 'Engajamento e motivação do time de EV',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a iniciativa <strong>Pesquisa Fala, Gente Boa!</strong>, voltada a sustentar o engajamento, a motivação e a qualidade das entregas do time de EV.',
+            projetos: [
+                {
+                    titulo: 'Pesquisa Fala, Gente Boa! — Planos de Ação por Diretoria',
+                    status: 'andamento',
+                    responsavel: 'Caio Pereira · Leonardo Soncin · Rogério Magno · Alex Jewstuzenko · Fabiano Migoto',
+                    objetivo: 'Sustentar o engajamento, a motivação e a qualidade das entregas do time de EV, especialmente após o movimento de incorporação salarial, reforçando o senso de pertencimento e propósito.',
+                    detalhamento: null,
+                    frentes: [
+                        {
+                            nome: 'Caio Pereira',
+                            tipo: 'normal',
+                            texto: `<p class="mb-3">As ações definidas a partir da pesquisa Fala, Gente Boa! 2025 foram implementadas em conjunto entre a liderança e o RH (BP Priscila).</p>
+                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">✅ Principais entregas concluídas</p>
+                            <ul class="space-y-1.5 mb-3">
+                                <li class="flex gap-2"><span class="text-emerald-500 shrink-0 mt-0.5">✔</span>Reestruturação da comunicação da Engenharia de Valor</li>
+                                <li class="flex gap-2"><span class="text-emerald-500 shrink-0 mt-0.5">✔</span>Criação de novos canais de comunicação</li>
+                                <li class="flex gap-2"><span class="text-emerald-500 shrink-0 mt-0.5">✔</span>Lançamento da Central EV — repositório de apoio e informações do time</li>
+                                <li class="flex gap-2"><span class="text-emerald-500 shrink-0 mt-0.5">✔</span>Encontro Global da EV — iniciativa de integração e cultura</li>
+                                <li class="flex gap-2"><span class="text-emerald-500 shrink-0 mt-0.5">✔</span>Continuidade do Café com Diretor, organizado internamente pela área de EV</li>
+                                <li class="flex gap-2"><span class="text-emerald-500 shrink-0 mt-0.5">✔</span>Reorganização da estrutura da equipe, aproximando lideranças dos Engenheiros de Valor</li>
+                            </ul>
+                            <div class="p-3 bg-sky-50 border border-sky-100 rounded-lg">
+                                <p class="text-xs font-bold text-sky-700 mb-1">🔄 Em andamento</p>
+                                <p class="text-sm text-slate-600">Em parceria com RH e Universidade Corporativa, está sendo estruturado um <strong>assessment de maturidade em IA</strong> para os Engenheiros de Valor, visando direcionar futuras capacitações.</p>
+                            </div>`
+                        },
+                        {
+                            nome: 'Leonardo Soncin',
+                            tipo: 'normal',
+                            texto: `<div class="space-y-2">
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">🎯 Direcionamentos</p>
+                                <ul class="space-y-1.5">
+                                    <li class="flex gap-2"><span class="text-sky-400 shrink-0 mt-0.5">•</span>Fortalecimento de práticas contínuas de reconhecimento</li>
+                                    <li class="flex gap-2"><span class="text-sky-400 shrink-0 mt-0.5">•</span>Desenvolvimento e capacitação das equipes</li>
+                                    <li class="flex gap-2"><span class="text-sky-400 shrink-0 mt-0.5">•</span>Melhoria da comunicação interna</li>
+                                    <li class="flex gap-2"><span class="text-sky-400 shrink-0 mt-0.5">•</span>Integração e engajamento das equipes</li>
+                                </ul>
+                                <div class="mt-3 p-3 bg-emerald-50 border border-emerald-100 rounded-lg">
+                                    <p class="text-xs font-bold text-emerald-700 mb-1">✅ Status</p>
+                                    <p class="text-xs text-slate-600">Sem identificação de riscos críticos que demandem ações extraordinárias.</p>
+                                </div>
+                            </div>`
+                        },
+                        {
+                            nome: 'Rogério Magno',
+                            tipo: 'normal',
+                            texto: `
+                            <div class="space-y-4">
+
+                                <div>
+                                    <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">📋 Plano Corporativo 2026</p>
+                                    <div class="grid grid-cols-1 gap-1.5">
+                                        <div class="flex items-start gap-3 p-2.5 bg-slate-50 rounded-lg">
+                                            <span class="text-xs font-bold text-slate-700 w-32 shrink-0">Carreira</span>
+                                            <span class="text-xs text-slate-600">Divulgação do Novo Book de Carreira e PDIs</span>
+                                        </div>
+                                        <div class="flex items-start gap-3 p-2.5 bg-slate-50 rounded-lg">
+                                            <span class="text-xs font-bold text-slate-700 w-32 shrink-0">Comunicação</span>
+                                            <span class="text-xs text-slate-600">Reuniões Trimestrais de Resultados e divulgação de Indicadores</span>
+                                        </div>
+                                        <div class="flex items-start gap-3 p-2.5 bg-slate-50 rounded-lg">
+                                            <span class="text-xs font-bold text-slate-700 w-32 shrink-0">Desenvolvimento</span>
+                                            <span class="text-xs text-slate-600">Programa de Mentoria e Troca de Conhecimentos</span>
+                                        </div>
+                                        <div class="flex items-start gap-3 p-2.5 bg-slate-50 rounded-lg">
+                                            <span class="text-xs font-bold text-slate-700 w-32 shrink-0">Reconhecimento</span>
+                                            <span class="text-xs text-slate-600">Celebração de Go-Lives e Divulgação de Cases de Sucesso</span>
+                                        </div>
+                                        <div class="flex items-start gap-3 p-2.5 bg-slate-50 rounded-lg">
+                                            <span class="text-xs font-bold text-slate-700 w-32 shrink-0">Clima</span>
+                                            <span class="text-xs text-slate-600">Calendário de Confraternizações</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">📍 Planos Locais</p>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <div class="p-3 rounded-lg border border-sky-100 bg-sky-50">
+                                            <p class="text-xs font-bold text-sky-700 mb-1">Rio Grande do Sul</p>
+                                            <p class="text-xs text-slate-600">Liderança e Reconhecimento — maior proximidade com a liderança e visibilidade de carreira</p>
+                                        </div>
+                                        <div class="p-3 rounded-lg border border-sky-100 bg-sky-50">
+                                            <p class="text-xs font-bold text-sky-700 mb-1">TOTVS IP</p>
+                                            <p class="text-xs text-slate-600">Remuneração e carreira — redução de turnover e melhor visibilidade de carreira</p>
+                                        </div>
+                                        <div class="p-3 rounded-lg border border-sky-100 bg-sky-50">
+                                            <p class="text-xs font-bold text-sky-700 mb-1">Recife</p>
+                                            <p class="text-xs text-slate-600">Apresentar Book de Carreira — maior transparência e visibilidade de carreira</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">🗓 Roadmap 2026 — Ações Corporativas</p>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                        <div class="p-3 rounded-lg border" style="background:#f0fdff;border-color:#bae6fd;">
+                                            <p class="text-xs font-bold mb-2" style="color:#0369a1;">1º Trimestre</p>
+                                            <ul class="space-y-1">
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span class="text-sky-400 shrink-0">•</span>Lançamento do Novo Book de Carreira</li>
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span class="text-sky-400 shrink-0">•</span>Apoio à distribuição dos PDIs</li>
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span class="text-sky-400 shrink-0">•</span>1ª Reunião Trimestral de Resultados</li>
+                                            </ul>
+                                        </div>
+                                        <div class="p-3 rounded-lg border" style="background:#f0fdf4;border-color:#bbf7d0;">
+                                            <p class="text-xs font-bold mb-2" style="color:#166534;">2º Trimestre</p>
+                                            <ul class="space-y-1">
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span class="text-emerald-400 shrink-0">•</span>Início da Mentoria Corporativa</li>
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span class="text-emerald-400 shrink-0">•</span>Painel de Reconhecimento de Go-Lives</li>
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span class="text-emerald-400 shrink-0">•</span>Confraternização Semestral</li>
+                                            </ul>
+                                        </div>
+                                        <div class="p-3 rounded-lg border" style="background:#fffbeb;border-color:#fde68a;">
+                                            <p class="text-xs font-bold mb-2" style="color:#92400e;">3º Trimestre</p>
+                                            <ul class="space-y-1">
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span class="text-amber-400 shrink-0">•</span>Revisão de PDIs e Feedbacks</li>
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span class="text-amber-400 shrink-0">•</span>Postagens Cases de Sucesso</li>
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span class="text-amber-400 shrink-0">•</span>Pesquisa de Pulso para medir comunicação</li>
+                                            </ul>
+                                        </div>
+                                        <div class="p-3 rounded-lg border" style="background:#fdf4ff;border-color:#e9d5ff;">
+                                            <p class="text-xs font-bold mb-2" style="color:#6b21a8;">4º Trimestre</p>
+                                            <ul class="space-y-1">
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span style="color:#a855f7;" class="shrink-0">•</span>Consolidação de Indicadores</li>
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span style="color:#a855f7;" class="shrink-0">•</span>Planejamento de Sucessão/promoção</li>
+                                                <li class="text-xs text-slate-600 flex gap-1.5"><span style="color:#a855f7;" class="shrink-0">•</span>Evento de Final de Ano</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>`
+                        },
+                        {
+                            nome: 'Fabiano Migoto',
+                            tipo: 'normal',
+                            texto: `<p class="mb-3">O alinhamento com o BP (Felipe) para acompanhamento dos planos de ação ainda não ocorreu devido à priorização de outras demandas.</p>
+                            <div class="p-3 bg-amber-50 border border-amber-100 rounded-lg mb-3">
+                                <p class="text-xs font-bold text-amber-700 mb-1">⏳ Pendente</p>
+                                <p class="text-xs text-slate-600">Agenda com BP será realizada após o retorno das férias do Migoto em <strong>20/07</strong>.</p>
+                            </div>
+                            <p>Paralelamente, o time pretende consolidar os resultados dos formulários utilizados nas AR Meetings de Serviços para identificar oportunidades e discutir as ações em conjunto com o BP.</p>`
+                        },
+                        {
+                            nome: 'Alex Jewstuzenko',
+                            tipo: 'normal',
+                            texto: `<div class="space-y-3">
+                                <div>
+                                    <p class="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-2">⚠️ Contexto</p>
+                                    <p class="mb-2">Foram identificadas inconsistências nos resultados da pesquisa devido à movimentação de colaboradores entre áreas, impactando parte da percepção atribuída à gestão atual.</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">✅ Plano de ação</p>
+                                    <ul class="space-y-1.5">
+                                        <li class="flex gap-2"><span class="text-emerald-500 shrink-0 mt-0.5">✔</span>Encontros com o time do EPMO para reforçar comunicação e alinhamento de objetivos</li>
+                                        <li class="flex gap-2"><span class="text-emerald-500 shrink-0 mt-0.5">✔</span>Esclarecimentos sobre o preenchimento adequado das pesquisas internas</li>
+                                        <li class="flex gap-2"><span class="text-emerald-500 shrink-0 mt-0.5">✔</span>Reuniões periódicas com a equipe e acompanhamento de metas</li>
+                                        <li class="flex gap-2"><span class="text-emerald-500 shrink-0 mt-0.5">✔</span>Fortalecimento da comunicação entre liderança e colaboradores</li>
+                                    </ul>
+                                </div>
+                            </div>`
+                        }
+                    ],
+                    proximosPassos: null
+                }
+            ]
+        },
+        {
+            id: 'mit',
+            icon: '🔧',
+            title: 'Programa de Revitalização da MIT',
+            shortTitle: 'Revitalização MIT',
+            subtitle: 'Modernização da metodologia com uso de IA',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha o <strong>Programa de Revitalização da MIT</strong>, voltado à revisão e modernização da Metodologia de Implantação TOTVS, considerando a aplicação de Inteligência Artificial e benchmark de metodologias de mercado.',
+            projetos: [
+                {
+                    titulo: 'Reavaliar a MIT — Formatando para uso de IA',
+                    status: 'andamento',
+                    responsavel: 'Leonardo Soncin · Renato Ormelezzi',
+                    objetivo: 'Reavaliar a MIT, formatando-a para uso de IA e modernizando suas práticas com base em benchmarks de mercado.',
+                    detalhamento: 'O programa segue em andamento, com foco na revisão e modernização da MIT considerando a aplicação de Inteligência Artificial e a evolução das melhores práticas de mercado.\n\nA frente de benchmark metodológico está em execução. Foram realizadas pesquisas de mercado e análises das metodologias adotadas por SAP, Oracle, Microsoft, Linx, Capgemini e Sankhya, com o objetivo de identificar práticas, abordagens e oportunidades de evolução para a MIT.\n\nComo próximas etapas, estão previstos encontros com Alvarez & Marsal (agendado para 22/07) e Deloitte, que ainda está em definição de data para a realização da conversa com os contatos indicados pelo Hermanno.\n\nParalelamente, a equipe segue evoluindo o material de entrega, consolidando os resultados obtidos no benchmark e refinando a análise de aplicabilidade das práticas identificadas, bem como as sugestões de evolução para a metodologia.',
+                    proximosPassos: 'A previsão de conclusão da Entrega 1 – Benchmark Metodológico permanece para 11/09.'
+                }
+            ]
+        },
+        {
+            id: 'rmr',
+            icon: '📈',
+            title: 'RMRs',
+            shortTitle: 'RMRs',
+            subtitle: 'Revisões mensais de resultados e maturidade de lideranças',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a iniciativa <strong>RMRs</strong>, dividida em 2 projetos voltados ao amadurecimento do perfil de lideranças e ao aumento da eficiência operacional de Serviços.',
+            projetos: [
+                {
+                    titulo: 'RMR — Amadurecimento do Perfil de Lideranças',
+                    status: 'andamento',
+                    responsavel: 'Felipe Tomaz',
+                    objetivo: 'Amadurecer o perfil das lideranças, fortalecendo competências de gestão, desenvolvimento de pessoas e direcionamento estratégico.',
+                    detalhamento: 'Está em andamento o redesenho do processo de RMR. Como parte dessa revisão, será estruturado um modelo de reporte executivo por e-mail, consolidando os principais indicadores de liderança (estrutura, pipeline de liderança, sucessão e movimentações), substituindo a necessidade de consulta aos dashboards.',
+                    proximosPassos: 'Apresentar a proposta inicial ainda no início do H2, alinhada ao plano de formação de lideranças já compartilhado com a diretoria.'
+                },
+                {
+                    titulo: 'RMR — Eficiência Operacional (+2 p.p. de Margem)',
+                    status: 'andamento',
+                    responsavel: 'Leonardo Soncin',
+                    objetivo: 'Aumentar a eficiência operacional, equilibrando crescimento e rentabilidade, com foco na melhoria da margem e meta de crescimento de +2 p.p.',
+                    detalhamento: 'Evolução do modelo de acompanhamento concluída para a etapa atual. Os principais indicadores passaram a ser compartilhados mensalmente com a liderança e estão sendo incorporados aos dashboards corporativos, promovendo maior alinhamento entre as áreas e reduzindo retrabalho na preparação das RMRs.',
+                    proximosPassos: null
+                }
+            ]
+        },
+        {
+            id: 'sinergia',
+            icon: '🔗',
+            title: 'Sinergia e Integração — Produto + IA',
+            shortTitle: 'Sinergia Produto + IA',
+            subtitle: 'Integração estratégica entre times de Produto e IA',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a iniciativa <strong>Sinergia e Integração — Produto + IA</strong>, voltada a fortalecer a integração entre os times de Produto e IA, promovendo cocriação de soluções e alinhamento estratégico.',
+            projetos: [
+                {
+                    titulo: 'Integração Produto + IA — Portal Único e Microprojetos',
+                    status: 'andamento',
+                    responsavel: 'Fabiano Migoto',
+                    objetivo: 'Fortalecer a integração com o time de Produto, promovendo maior colaboração, alinhamento estratégico e cocriação de soluções que gerem valor ao cliente e eficiência operacional.',
+                    detalhamento: 'As agendas semanais seguem acontecendo normalmente, com evolução significativa da integração entre as áreas. O principal foco das últimas semanas foi a incorporação do time de RM ao projeto, por meio de treinamentos sobre a metodologia MIT, apresentação dos processos e portais e capacitação técnica para geração de MITs e parametrizações.\n\nTambém foram realizadas ações de integração com os executivos de RM para alinhamento das funcionalidades e acompanhamento da iniciativa.\n\nNa frente do Winthor, foi promovido um alinhamento entre Produto, Franquias e Licenciamento para esclarecer o modelo de licenciamento, permitindo que as franquias iniciem a regularização dos contratos.',
+                    proximosPassos: 'Agendas técnicas com RM, possível workshop presencial em Belo Horizonte e continuidade dos alinhamentos técnicos para Datasul e demais produtos.'
+                }
+            ]
+        },
+        {
+            id: 'trocas',
+            icon: '🔄',
+            title: 'Trocas Programadas',
+            shortTitle: 'Trocas Programadas',
+            subtitle: 'Mecanismo de reposição planejada sem perda de janela operacional',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a iniciativa <strong>Trocas Programadas</strong>, voltada a aumentar a eficiência operacional por meio de reposições planejadas sem perda de janela operacional.',
+            projetos: [
+                {
+                    titulo: 'Trocas Programadas — Eficiência Operacional',
+                    status: 'andamento',
+                    responsavel: 'Leonardo Soncin',
+                    objetivo: 'Aumentar a eficiência operacional, equilibrando crescimento e rentabilidade, com foco na melhoria da margem e meta de crescimento de +2 p.p.',
+                    detalhamento: 'Objetivo da iniciativa redefinido para ampliar a visibilidade sobre colaboradores com permanência recorrente em níveis inferiores de desempenho, apoiando a identificação de oportunidades de movimentação e gestão de performance.',
+                    proximosPassos: 'Em julho, será realizada agenda com o Felipe (RH) para definir o modelo de acompanhamento da iniciativa e apresentar os resultados e proposta de governança na próxima atualização do projeto.'
+                }
+            ]
+        },
+        {
+            id: 'nrec',
+            icon: '💰',
+            title: 'Transformação de Receita NREC em REC',
+            shortTitle: 'NREC → REC',
+            subtitle: 'Novo modelo de comercialização com foco em receita recorrente',
+            tipo: 'iniciativa',
+            descricao: 'Esta seção detalha a nova iniciativa <strong>Transformação de Receita NREC em REC</strong>, voltada a estudar e propor um novo modelo de comercialização para os serviços da TOTVS com foco em ampliar a receita recorrente.',
+            projetos: [
+                {
+                    titulo: 'Novo modelo de comercialização — Transformação NREC em REC',
+                    status: 'iniciar',
+                    responsavel: 'A definir',
+                    objetivo: 'Estudar e propor um novo modelo de comercialização para os serviços da TOTVS, com foco em ampliar a receita recorrente por meio da transformação de projetos pontuais em ofertas recorrentes sustentáveis. A iniciativa visa avaliar alternativas como modelos de Saastização, reduzindo o risco de churn após a conclusão dos projetos, aumentando a previsibilidade de receita e alinhando o modelo comercial à estrutura de custos e à estratégia de crescimento da companhia.',
+                    detalhamento: 'A iniciativa permanece em fase de concepção e avaliação de viabilidade. O objetivo é estudar alternativas para ampliar a receita recorrente por meio da evolução dos modelos atuais de comercialização dos serviços. Neste momento, ainda não há definição sobre a formalização do projeto, sendo necessária análise de viabilidade técnica, jurídica, financeira e comercial, além da definição dos stakeholders que participarão das discussões.',
+                    proximosPassos: null
+                }
+            ]
+        }
+    ]
+};
+
+// ─── HELPERS ───
+function statusPill(s) {
+    if (s === 'andamento')  return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-600">● Em andamento</span>`;
+    if (s === 'encerrado')  return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-600">● Concluído</span>`;
+    return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-600">● À iniciar</span>`;
+}
+
+function countProjects() {
+    let total = 0, andamento = 0, iniciar = 0, encerrado = 0;
+    appData.iniciativas.forEach(i => {
+        if (i.tipo === 'iniciativa') {
+            i.projetos.forEach(p => {
+                total++;
+                if (p.status === 'andamento') andamento++;
+                else if (p.status === 'encerrado') encerrado++;
+                else iniciar++;
+            });
+        }
+    });
+    return { total, andamento, iniciar, encerrado };
+}
+
+function countByResp() {
+    const map = {};
+    appData.iniciativas.forEach(i => {
+        if (i.tipo !== 'iniciativa') return;
+        i.projetos.forEach(p => {
+            if (p.status === 'encerrado') return;
+            p.responsavel.split('·').forEach(r => {
+                const name = r.trim();
+                if (name === 'A definir') return;
+                map[name] = (map[name] || 0) + 1;
+            });
+        });
+    });
+    return Object.entries(map).sort((a, b) => b[1] - a[1]);
+}
+
+// ─── SIDEBAR ───
+function renderSidebar() {
+    const nav = document.getElementById('sidebar-nav');
+    nav.innerHTML = '';
+    appData.iniciativas.forEach(ini => {
+        const count = ini.tipo === 'iniciativa' ? ini.projetos.length : null;
+        const el = document.createElement('div');
+        el.className = 'nav-item px-4 py-2.5 rounded flex items-center gap-3 text-sm font-medium text-slate-600 shrink-0';
+        el.innerHTML = `
+            <span class="text-base">${ini.icon}</span>
+            <span class="flex-1 leading-tight">${ini.shortTitle}</span>
+            ${count ? `<span class="text-xs bg-slate-100 text-slate-400 font-semibold px-1.5 py-0.5 rounded-full">${count}</span>` : ''}
+        `;
+        if (ini.id === 'overview') el.classList.add('active');
+        el.addEventListener('click', () => {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+            ini.tipo === 'overview' ? renderOverview() : renderIniciativa(ini.id);
+        });
+        nav.appendChild(el);
+    });
+}
+
+// ─── OVERVIEW ───
+function renderOverview() {
+    setHeader('Visão Geral do Portfólio', 'PMO Serviços · Julho 2026');
+    const counts = countProjects();
+    const respData = countByResp();
+    const maxResp = respData[0][1];
+
+    document.getElementById('header-badges').innerHTML = '';
+
+    const respBars = respData.map(([name, count]) => `
+        <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-500 w-44 truncate shrink-0">${name}</span>
+            <div class="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
+                <div class="h-2 rounded-full bar-fill" style="width:${(count/maxResp)*100}%;background:#94a3b8;"></div>
+            </div>
+            <span class="text-xs font-bold w-4 text-right shrink-0 text-slate-400">${count}</span>
+        </div>
+    `).join('');
+
+    const tableRows = appData.iniciativas.filter(i => i.tipo === 'iniciativa').map(i => {
+        const statuses = i.projetos.map(p => p.status);
+        const hasAndamento = statuses.includes('andamento');
+        const hasIniciar = statuses.includes('iniciar');
+        const hasEncerrado = statuses.every(s => s === 'encerrado');
+        let pill = hasEncerrado
+            ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-600">● Concluído</span>`
+            : hasAndamento && hasIniciar
+                ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">● Misto</span>`
+                : hasAndamento
+                    ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-600">● Em andamento</span>`
+                    : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-600">● À iniciar</span>`;
+        const resps = [...new Set(i.projetos.flatMap(p => p.responsavel.split('·').map(r => r.trim())))].join(', ');
+        return `<tr class="hover:bg-slate-50 cursor-pointer transition-colors" onclick="navTo('${i.id}')">
+            <td class="py-3 px-4 text-sm font-medium text-slate-800">${i.icon} ${i.title}</td>
+            <td class="py-3 px-4 text-sm text-slate-500 text-center">${i.projetos.length}</td>
+            <td class="py-3 px-4 text-xs text-slate-500 hidden md:table-cell">${resps}</td>
+            <td class="py-3 px-4">${pill}</td>
+        </tr>`;
+    }).join('');
+
+    document.getElementById('content-container').innerHTML = `
+    <div class="max-w-5xl mx-auto space-y-6 pb-16">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex flex-col gap-1">
+                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wide">Total de Projetos</span>
+                <span class="text-4xl font-extrabold text-slate-800">${counts.total}</span>
+                <span class="text-xs text-slate-400">em 14 iniciativas</span>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex flex-col gap-1">
+                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wide">Em Andamento</span>
+                <span class="text-4xl font-extrabold text-sky-500">${counts.andamento}</span>
+                <span class="text-xs text-slate-400">${Math.round(counts.andamento/counts.total*100)}% do portfólio</span>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex flex-col gap-1">
+                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wide">À Iniciar</span>
+                <span class="text-4xl font-extrabold text-amber-400">${counts.iniciar}</span>
+                <span class="text-xs text-slate-400">${Math.round(counts.iniciar/counts.total*100)}% do portfólio</span>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 flex flex-col gap-1">
+                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wide">Concluídos</span>
+                <span class="text-4xl font-extrabold text-emerald-500">${counts.encerrado}</span>
+                <span class="text-xs text-slate-400">${Math.round(counts.encerrado/counts.total*100)}% do portfólio</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wider mb-5">Projetos por Responsável</h3>
+                <div class="space-y-3">${respBars}</div>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col items-center justify-center">
+                <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wider mb-4 self-start">Distribuição por Status</h3>
+                <div class="chart-container"><canvas id="donutChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-100">
+                <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wider">Todas as Iniciativas</h3>
+            </div>
+            <table class="w-full">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="py-3 px-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Iniciativa</th>
+                        <th class="py-3 px-4 text-center text-xs font-semibold text-slate-400 uppercase tracking-wide">Projetos</th>
+                        <th class="py-3 px-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide hidden md:table-cell">Responsável(eis)</th>
+                        <th class="py-3 px-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wide">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">${tableRows}</tbody>
+            </table>
+        </div>
+    </div>`;
+
+    setTimeout(() => {
+        const ctx = document.getElementById('donutChart');
+        if (!ctx) return;
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ["Em andamento", "À iniciar", "Concluídos"],
+                datasets: [{ data: [counts.andamento, counts.iniciar, counts.encerrado], backgroundColor: ['#0ea5e9', '#f59e0b', '#10b981'], borderWidth: 0, hoverOffset: 6 }]
+            },
+            options: { cutout: '72%', plugins: { legend: { position: 'bottom', labels: { font: { size: 11, family: 'Inter' }, padding: 16 } }, tooltip: { callbacks: { label: c => ` ${c.parsed} projetos` } } } }
+        });
+    }, 100);
+}
+
+// ─── INICIATIVA ───
+function renderIniciativa(id) {
+    const ini = appData.iniciativas.find(i => i.id === id);
+    if (!ini) return;
+    setHeader(`${ini.icon} ${ini.title}`, ini.subtitle);
+    document.getElementById('header-badges').innerHTML = '';
+
+    const projHtml = ini.projetos.map((p, idx) => {
+        const accId = `acc-${id}-${idx}`;
+        let body = '';
+
+        // Objetivo
+        body += `<div class="mb-5"><p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Objetivo Estratégico</p>
+            <p class="text-sm text-slate-600 leading-relaxed bg-white border border-slate-200 rounded-lg p-4 italic">${p.objetivo}</p></div>`;
+
+        // Detalhamento
+        if (p.detalhamento) {
+            const lines = p.detalhamento.split('\n\n').map(l => `<p class="text-sm text-slate-600 leading-relaxed mb-2">${l}</p>`).join('');
+            body += `<div class="mb-5"><p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Detalhamento</p>${lines}</div>`;
+        }
+
+        // Link extra (Café, Gestão)
+        // Frentes (IA+IH, Pesquisa, etc.)
+        if (p.frentes) {
+            body += `<div class="mb-5"><p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Status por Frente</p><div class="space-y-3">`;
+            p.frentes.forEach(f => {
+                const isAtencao = f.tipo === 'atencao';
+                body += `
+                    <div class="p-4 rounded-lg border ${isAtencao ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200'}">
+                        <p class="text-xs font-bold mb-3 ${isAtencao ? 'text-amber-700' : 'text-slate-700'}">${f.nome}</p>
+                        <div class="text-sm text-slate-600 leading-relaxed">${f.texto}</div>
+                    </div>`;
+            });
+            body += `</div></div>`;
+        }
+
+        // Link extra (Café, Gestão)
+        if (p.linkExtra) {
+            body += `<div class="mb-5">
+                <a href="${p.linkExtra.url}" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-2 bg-white border border-slate-200 hover:border-sky-300 hover:bg-sky-50 rounded-lg px-4 py-3 text-xs text-slate-600 hover:text-sky-600 transition-colors">
+                   <span class="text-base">📄</span><span>${p.linkExtra.label}</span><span class="text-slate-300">↗</span>
+                </a></div>`;
+        }
+
+        // Evidência extra (BID)
+        if (p.evidenciaExtra) {
+            const isObj = typeof p.evidenciaExtra === 'object';
+            body += `<div class="mb-5 p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Evidência</p>
+                ${isObj
+                    ? `<a href="${p.evidenciaExtra.url}" target="_blank" rel="noopener noreferrer"
+                         class="flex items-start gap-3 hover:text-sky-600 transition-colors group">
+                         <span class="text-slate-400 group-hover:text-sky-400 shrink-0 mt-0.5 text-base">📄</span>
+                         <span class="text-sm text-slate-600 group-hover:text-sky-600 leading-relaxed">${p.evidenciaExtra.label}</span>
+                         <span class="text-slate-300 group-hover:text-sky-400 shrink-0 mt-0.5">↗</span>
+                       </a>`
+                    : `<p class="text-sm text-slate-600 leading-relaxed">${p.evidenciaExtra}</p>`
+                }</div>`;
+        }
+
+        // Evidências (BID links)
+        if (p.evidencias) {
+            body += `<div class="mb-5"><p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Evidências de Utilização</p><div class="grid grid-cols-2 gap-2">`;
+            p.evidencias.forEach(e => {
+                body += `<a href="${e.url}" target="_blank" rel="noopener noreferrer"
+                   class="flex items-center gap-2 bg-white border border-slate-200 hover:border-sky-300 hover:bg-sky-50 rounded-lg p-3 text-xs text-slate-600 hover:text-sky-600 transition-colors group">
+                    <span class="text-slate-300 group-hover:text-sky-400 text-base shrink-0">📁</span>
+                    <span class="flex-1">${e.label}</span>
+                    <span class="text-slate-300 group-hover:text-sky-400 shrink-0">↗</span></a>`;
+            });
+            body += `</div></div>`;
+        }
+
+        // Resultados das pesquisas (Café com Diretor)
+        if (p.resultados) {
+            body += `<div class="mb-5"><p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Resultados das Pesquisas de Satisfação</p><div class="space-y-4">`;
+            p.resultados.forEach(r => {
+                body += `
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                    <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between" style="background:#f0fdff;">
+                        <span class="text-sm font-bold text-slate-700">${r.titulo}</span>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full" style="background:#00c9eb22;color:#00899e;">👥 ${r.participantes} participantes</span>
+                    </div>
+                    <div class="p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">📊 Resultado Geral</p>
+                            <ul class="space-y-1.5">${r.geral.map(g => `<li class="text-xs text-slate-600 leading-relaxed flex gap-2"><span class="text-sky-400 shrink-0 mt-0.5">●</span>${g}</li>`).join('')}</ul>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2">✅ Pontos Positivos</p>
+                            <ul class="space-y-1.5">${r.positivos.map(p => `<li class="text-xs text-slate-600 leading-relaxed flex gap-2"><span class="text-emerald-400 shrink-0 mt-0.5">+</span>${p}</li>`).join('')}</ul>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-2">💡 Oportunidades de Melhoria</p>
+                            <ul class="space-y-1.5">${r.melhorias.map(m => `<li class="text-xs text-slate-600 leading-relaxed flex gap-2"><span class="text-amber-400 shrink-0 mt-0.5">→</span>${m}</li>`).join('')}</ul>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            body += `</div></div>`;
+        }
+        if (p.calendario) {
+            body += `<div class="mb-5"><p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Calendário de Eventos 2026</p>
+            <table class="w-full text-sm border-collapse">
+                <thead><tr class="bg-slate-50">
+                    <th class="text-left py-2 px-3 text-xs font-semibold text-slate-400 border-b border-slate-200">Data</th>
+                    <th class="text-left py-2 px-3 text-xs font-semibold text-slate-400 border-b border-slate-200">Status</th>
+                    <th class="text-left py-2 px-3 text-xs font-semibold text-slate-400 border-b border-slate-200">Local</th>
+                </tr></thead><tbody>`;
+            p.calendario.forEach(ev => {
+                const isReal = ev.status === 'Realizado';
+                const isConf = ev.status === 'Confirmado';
+                const cls = isReal ? 'text-emerald-600' : isConf ? 'text-sky-600' : 'text-amber-600';
+                const icon = isReal ? '✔' : isConf ? '✔' : '◷';
+                body += `<tr class="border-b border-slate-100">
+                    <td class="py-2 px-3 text-slate-600">${ev.data}</td>
+                    <td class="py-2 px-3 font-semibold ${cls}">${icon} ${ev.status}</td>
+                    <td class="py-2 px-3 text-slate-600">${ev.local}</td></tr>`;
+            });
+            body += `</tbody></table></div>`;
+        }
+
+        // TAC BH visual (tabela + gráfico)
+        if (p.tacbhData) {
+            const d = p.tacbhData;
+            const chartId = `tacbh-chart-${idx}`;
+            const motifColors = { 'Projeto em Crise': '#ef4444', 'Demanda Emergencial': '#f59e0b', 'Situação Pontual': '#0ea5e9' };
+
+            body += `
+            <div class="mb-5 space-y-4">
+
+                <!-- KPI total -->
+                <div class="flex items-center gap-4 p-4 rounded-xl border border-slate-200 bg-white">
+                    <div class="text-center px-5 py-3 rounded-lg" style="background:#f0fdff;">
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Total de HE</p>
+                        <p class="text-3xl font-extrabold" style="color:#00899e;">${d.totalHoras}</p>
+                        <p class="text-xs text-slate-400 mt-1">período ${d.periodo}</p>
+                    </div>
+                    <div class="flex-1 grid grid-cols-3 gap-3">
+                        ${d.classificacao.map(c => `
+                        <div class="text-center p-3 rounded-lg bg-slate-50 border border-slate-100">
+                            <p class="text-xl font-extrabold" style="color:${motifColors[c.label] || '#64748b'};">${c.percentual}%</p>
+                            <p class="text-xs text-slate-500 mt-1 leading-tight">${c.label}</p>
+                        </div>`).join('')}
+                    </div>
+                </div>
+
+                <!-- Tabela top 3 -->
+                <div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Top 3 Clientes com Maior Volume de HE</p>
+                    <table class="w-full border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-50">
+                                <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wide border-b border-slate-200">#</th>
+                                <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wide border-b border-slate-200">Cliente</th>
+                                <th class="text-center py-2.5 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wide border-b border-slate-200">Horas</th>
+                                <th class="text-center py-2.5 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wide border-b border-slate-200">%</th>
+                                <th class="text-left py-2.5 px-4 text-xs font-semibold text-slate-400 uppercase tracking-wide border-b border-slate-200">Classificação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${d.topClientes.map((c, i) => `
+                            <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-slate-50'} border-b border-slate-100">
+                                <td class="py-3 px-4 font-bold text-slate-400">${i + 1}º</td>
+                                <td class="py-3 px-4 font-semibold text-slate-800">${c.cliente}</td>
+                                <td class="py-3 px-4 text-center font-bold text-slate-700">${c.horas}</td>
+                                <td class="py-3 px-4 text-center">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold" style="background:${motifColors[c.motivo]}22;color:${motifColors[c.motivo]};">${c.percentual}%</span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <span class="inline-flex items-center gap-1.5 text-xs font-semibold" style="color:${motifColors[c.motivo]};">● ${c.motivo}</span>
+                                </td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Gráfico -->
+                <div class="bg-white border border-slate-200 rounded-xl p-5">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Classificação de Causa — Distribuição %</p>
+                    <canvas id="${chartId}" height="90"></canvas>
+                </div>
+
+                <!-- Link completo -->
+                ${d.linkCompleto ? `<a href="${d.linkCompleto.url}" target="_blank" rel="noopener noreferrer"
+                   class="flex items-center gap-3 bg-white border border-slate-200 hover:border-sky-300 hover:bg-sky-50 rounded-xl px-5 py-4 text-sm text-slate-600 hover:text-sky-600 transition-colors group">
+                    <span class="text-xl shrink-0">📊</span>
+                    <span class="flex-1 font-medium">Ver levantamento completo — todos os clientes, motivos e justificativas</span>
+                    <span class="text-slate-300 group-hover:text-sky-400 shrink-0 font-bold">↗</span>
+                </a>` : ''}
+            </div>`;
+
+            // Init chart after render
+            const _chartId = chartId;
+            const _labels = d.classificacao.map(c => c.label);
+            const _data   = d.classificacao.map(c => c.percentual);
+            const _colors = d.classificacao.map(c => motifColors[c.label] || '#64748b');
+            setTimeout(() => {
+                const ctx = document.getElementById(_chartId);
+                if (!ctx || ctx._chartInstance) return;
+                ctx._chartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: _labels,
+                        datasets: [{ data: _data, backgroundColor: _colors, borderRadius: 6, borderSkipped: false }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.parsed.y + '%' } } },
+                        scales: {
+                            y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%', font: { size: 11 } }, grid: { color: '#f1f5f9' } },
+                            x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+                        }
+                    }
+                });
+            }, 200);
+        }
+        if (p.atencao) {
+            body += `<div class="mb-5 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <p class="text-xs font-bold text-amber-700 mb-1">⚠️ Ponto de Atenção</p>
+                <p class="text-sm text-amber-800 leading-relaxed">${p.atencao}</p></div>`;
+        }
+
+        // Próximos Passos
+        if (p.proximosPassos) {
+            const lines = p.proximosPassos.split('\n\n').map(l => `<p class="text-sm text-indigo-800 leading-relaxed mb-1">→ ${l}</p>`).join('');
+            body += `<div><p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Próximos Passos</p>
+                <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4">${lines}</div></div>`;
+        }
+
+        // Placeholder
+        if (!p.detalhamento && !p.frentes && !p.calendario) {
+            body += `<div class="mt-2 p-4 bg-slate-50 border border-dashed border-slate-200 rounded-lg text-center">
+                <p class="text-xs text-slate-400 italic">Detalhamento em atualização — aguarde a próxima edição.</p></div>`;
+        }
+
+        const isEncerrado = p.status === 'encerrado';
+        return `<div class="bg-white border ${isEncerrado ? 'border-red-100' : 'border-slate-200'} rounded-xl shadow-sm overflow-hidden">
+            <button class="w-full px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition-colors focus:outline-none" onclick="toggleAcc('${accId}')">
+                <div class="text-left pr-4">
+                    <h3 class="font-bold text-slate-800 text-base md:text-lg leading-snug">${p.titulo}</h3>
+                    <div class="flex items-center gap-3 mt-2 flex-wrap">
+                        ${statusPill(p.status)}
+                        <span class="text-xs text-slate-400">👤 ${p.responsavel}</span>
+                    </div>
+                </div>
+                <span id="icon-${accId}" class="chevron flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-400 shrink-0 text-xs">▼</span>
+            </button>
+            <div id="${accId}" class="accordion-content border-t border-slate-100 bg-slate-50/30">
+                <div class="p-6 md:p-8">${body}</div>
+            </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('content-container').innerHTML = `
+    <div class="max-w-4xl mx-auto space-y-5 pb-16">
+        <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-slate-200">
+            <p class="text-slate-600 text-sm md:text-base leading-relaxed">${ini.descricao} <strong>Clique nos itens abaixo para expandir o detalhamento.</strong></p>
+        </div>
+        ${projHtml}
+    </div>`;
+}
+
+// ─── UTILS ───
+function setHeader(title, sub) {
+    document.getElementById('main-title').innerHTML = title;
+    document.getElementById('main-subtitle').textContent = sub;
+}
+function toggleAcc(id) {
+    const content = document.getElementById(id);
+    const icon = document.getElementById('icon-' + id);
+    const isOpen = content.classList.contains('open');
+    document.querySelectorAll('.accordion-content.open').forEach(el => {
+        if (el.id !== id) { el.classList.remove('open'); const i = document.getElementById('icon-' + el.id); if (i) { i.classList.remove('rotated'); i.style.transform = ''; } }
+    });
+    content.classList.toggle('open', !isOpen);
+    icon.classList.toggle('rotated', !isOpen);
+}
+function navTo(id) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const ini = appData.iniciativas.find(i => i.id === id);
+    if (!ini) return;
+    const idx = appData.iniciativas.indexOf(ini);
+    const items = [...document.querySelectorAll('.nav-item')];
+    if (items[idx]) items[idx].classList.add('active');
+    renderIniciativa(id);
+}
+document.addEventListener('DOMContentLoaded', () => { renderSidebar(); renderOverview(); });
+</script>
+</body>
+</html>
