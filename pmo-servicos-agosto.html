@@ -139,10 +139,25 @@ const appData = {
                     status: 'andamento',
                     responsavel: 'Caio Pereira',
                     objetivo: 'Aumentar a previsibilidade nas implantações, melhorar a precificação dos projetos e minimizar riscos iniciais com planejamentos mais acurados.',
-                    detalhamento: 'A atualizar',
+                    detalhamento: 'A iniciativa BID Approval está organizada em duas frentes específicas: uma focada em propostas de custo a partir de R$ 300 mil e outra dedicada aos contratos recorrentes com MRR acima de R$ 10 mil. Ambas frentes têm como meta reforçar a identificação das evidências de BID, garantir a aderência ao processo e apoiar a governança com indicadores mais robustos.',
+                    frentes: [
+                        {
+                            nome: 'BID Approval para propostas com custo a partir de R$ 300 mil',
+                            tipo: 'normal',
+                            texto: `<p class="mb-3">Refinamento da automação responsável pela identificação das evidências de BID, com foco na redução do tempo de processamento e no aumento da assertividade na localização dos documentos.</p>
+                            <p class="mb-3">Acompanhamento da aderência das equipes ao novo processo, validando a estrutura de armazenamento das pastas e a disponibilidade dos arquivos obrigatórios (BID, gravação e transcrição das reuniões).</p>
+                            <p class="mb-3">Cruzamento das informações com o CRM para validar a cobertura dos BIDs identificados e disponibilizar indicadores de aderência ao processo, apoiando a governança e o monitoramento da iniciativa.</p>`
+                        },
+                        {
+                            nome: 'BID para contratos recorrentes com MRR acima de R$ 10 mil',
+                            tipo: 'normal',
+                            texto: `<p class="mb-3">Regra de aplicação em fase de definição.</p>
+                            <p class="mb-3">Reunião agendada para <strong>05/08</strong> com as áreas envolvidas para desenhar o processo de BID aplicável aos contratos de Serviços Recorrentes e de MI, definindo critérios, fluxo operacional e responsabilidades.</p>`
+                        }
+                    ],
                     evidencias: null,
                     evidenciaExtra: null,
-                    proximosPassos: 'A atualizar'
+                    proximosPassos: 'Finalizar a definição da regra de aplicação para contratos recorrentes; avançar no refinamento da automação de evidências e iniciar o cruzamento com o CRM para indicadores de aderência.'
                 }
             ]
         },
