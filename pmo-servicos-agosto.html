@@ -260,8 +260,22 @@ const appData = {
                     status: 'andamento',
                     responsavel: 'Rogério Magno',
                     objetivo: 'Estruturar modelo de acompanhamento executivo das horas excedentes na unidade BH, com visão consolidada de volume, riscos, justificativas e planos de ação.',
-                    detalhamento: 'O detalhamento das horas excedentes do TAC BH, referente ao período de 11/05 a 10/06, ainda não foi disponibilizado pelo RMO.',
-                    tacbhData: null,
+                    detalhamento: 'Levantamento estruturado das horas excedentes do TAC BH referente ao período de 11/05 a 10/06/2026. O volume total registrado foi de <strong>276h12</strong>, com concentração de 75% das horas no cliente EMIVE, classificado como Projeto em Crise. O acompanhamento segue sendo realizado mensalmente, referenciando os períodos que antecedem as agendas de report.',
+                    tacbhData: {
+                        totalHoras: '276h12',
+                        periodo: '11/05 a 10/06/2026',
+                        linkCompleto: { label: 'Ver levantamento completo — todos os clientes, motivos e justificativas', url: 'https://docs.google.com/spreadsheets/d/1D7IpmrOwoE2gyeZFOaGZeOtTtfYdTK7wSP7VmNmTLSQ/edit?usp=sharing' },
+                        topClientes: [
+                            { cliente: 'EMIVE', horas: '207h06', percentual: 75, motivo: 'Projeto em Crise' },
+                            { cliente: 'Adm de Gente (Desligamento)', horas: '26h43', percentual: 10, motivo: 'Situação Pontual' },
+                            { cliente: 'CAESOUTH', horas: '23h12', percentual: 8, motivo: 'Demanda Emergencial' }
+                        ],
+                        classificacao: [
+                            { label: 'Projeto em Crise', percentual: 75 },
+                            { label: 'Demanda Emergencial', percentual: 8 },
+                            { label: 'Situação Pontual', percentual: 17 }
+                        ]
+                    },
                 }
             ]
         },
