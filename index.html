@@ -851,7 +851,11 @@ exports.init = init;
             const templateConfig = {
                 rememberExpirationKey: "staticrypt_expiration",
                 rememberPassphraseKey: "staticrypt_passphrase",
-                replaceHtmlCallback: null,
+                // prevent staticrypt from replacing the current document with the decrypted HTML
+                // we'll redirect to the real page instead of briefly showing decrypted content
+                replaceHtmlCallback: function(/* plainHTML */) {
+                    /* no-op to avoid document.write(plainHTML) */
+                },
                 clearLocalStorageCallback: null,
             };
 
@@ -862,18 +866,21 @@ exports.init = init;
             window.onload = async function () {
                 const { isSuccessful } = await staticrypt.handleDecryptOnLoad();
 
-                // if we didn't decrypt anything on load, show the password prompt. Otherwise the content has already been
-                // replaced, no need to do anything
-                if (!isSuccessful) {
-                    // hide loading screen
-                    document.getElementById("staticrypt_loading").classList.add("hidden");
-                    document.getElementById("staticrypt_content").classList.remove("hidden");
-                    document.getElementById("staticrypt-password").focus();
+                // if automatic decryption succeeded, redirect immediately to the menu instead of showing decrypted HTML
+                if (isSuccessful) {
+                    window.location.href = "menu.html";
+                    return;
+                }
 
-                    // show the remember me checkbox
-                    if (isRememberEnabled) {
-                        document.getElementById("staticrypt-remember-label").classList.remove("hidden");
-                    }
+                // otherwise show the password prompt
+                // hide loading screen
+                document.getElementById("staticrypt_loading").classList.add("hidden");
+                document.getElementById("staticrypt_content").classList.remove("hidden");
+                document.getElementById("staticrypt-password").focus();
+
+                // show the remember me checkbox
+                if (isRememberEnabled) {
+                    document.getElementById("staticrypt-remember-label").classList.remove("hidden");
                 }
             };
 
